@@ -1,6 +1,6 @@
 # Nishita & Akshay — Wedding Invitation
 
-A responsive, standalone wedding invitation with an animated wax-sealed envelope, traditional family invitation, scratch-to-reveal wedding date, music controls, and event locations.
+A responsive, standalone wedding invitation with an animated wax-sealed envelope, traditional family invitation, scratch-to-reveal wedding date, animated portrait reveals, family photography, a wedding countdown, music and reveal sound controls, and event locations.
 
 ## Preview locally
 
