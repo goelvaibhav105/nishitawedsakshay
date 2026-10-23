@@ -12,7 +12,7 @@ const music=document.querySelector('#wedding-music'),musicToggle=document.queryS
 function syncMusic(){const playing=!music.paused;musicToggle.setAttribute('aria-pressed',String(playing));musicToggle.setAttribute('aria-label',playing?'Pause wedding music':'Play wedding music');musicToggle.querySelector('.music-label').textContent=playing?'Music on':'Music off';musicToggle.classList.toggle('playing',playing)}
 function startMusic(){musicToggle.hidden=false;music.play().then(syncMusic).catch(syncMusic)}
 musicToggle.addEventListener('click',()=>{if(music.paused)startMusic();else music.pause()});music.addEventListener('play',syncMusic);music.addEventListener('pause',syncMusic);music.addEventListener('error',()=>{musicToggle.querySelector('.music-label').textContent='Retry music';musicToggle.setAttribute('aria-label','Retry wedding music')});
-const stars=document.querySelector('.star-field');for(let i=0;i<24;i++){const star=document.createElement('span');star.textContent=i%3?'✦':'✧';star.style.cssText=`left:${(i*37+7)%100}%;top:${(i*23+3)%100}%;--delay:-${i*.79}s;--duration:${5+i%5}s;--size:${8+i%4*3}px`;stars.appendChild(star)}
+const stars=document.querySelector('.star-field');for(let i=0;i<32;i++){const star=document.createElement('span');star.textContent=i%3?'✦':'✧';star.style.cssText=`left:${(i*37+7)%100}%;top:${(i*23+3)%100}%;--delay:-${i*.79}s;--duration:${5+i%5}s;--size:${8+i%4*3}px`;stars.appendChild(star)}
 function celebrateDate(){if(reduced)return;const card=document.querySelector('.scratch-card');for(let i=0;i<16;i++){const spark=document.createElement('span');spark.className='date-spark';spark.textContent='✦';spark.style.setProperty('--x',`${Math.cos(i*Math.PI/8)*150}px`);spark.style.setProperty('--y',`${Math.sin(i*Math.PI/8)*110}px`);card.appendChild(spark);setTimeout(()=>spark.remove(),1800)}}
 
 // A short shower of petals welcomes guests; it never blocks interaction.
@@ -31,3 +31,11 @@ effectsToggle.addEventListener('click',()=>{effectsEnabled=!effectsEnabled;effec
 document.querySelectorAll('.portrait-card').forEach(card=>card.addEventListener('click',()=>{if(card.classList.contains('portrait-revealed'))return;card.classList.add('portrait-revealed');card.setAttribute('aria-expanded','true');card.setAttribute('aria-label',card.querySelector('img').alt+' — portrait revealed');playRevealSound();}));
 function updateCountdown(){const remaining=new Date('2026-12-12T19:00:00+05:30').getTime()-Date.now();const box=document.querySelector('.countdown');if(remaining<=0){box.querySelector('.countdown-values').hidden=true;const message=box.querySelector('.countdown-message');message.hidden=false;message.textContent=remaining> -86400000?'Today, our forever begins.':'Our forever has begun. Thank you for your love.';return;}const values={days:Math.floor(remaining/86400000),hours:Math.floor(remaining/3600000)%24,minutes:Math.floor(remaining/60000)%60};Object.entries(values).forEach(([key,value])=>box.querySelector(`[data-count="${key}"]`).textContent=String(value).padStart(2,'0'));}
 updateCountdown();setInterval(()=>{if(!document.hidden)updateCountdown()},30000);
+// Accessible venue disclosure: tap, keyboard, outside click and Escape.
+const venueToggle=document.querySelector('#venue-toggle'),venueLinks=document.querySelector('#venue-links');
+function closeVenues(restoreFocus=false){venueToggle.setAttribute('aria-expanded','false');venueLinks.hidden=true;if(restoreFocus)venueToggle.focus()}
+venueToggle.addEventListener('click',()=>{const open=venueToggle.getAttribute('aria-expanded')==='true';venueToggle.setAttribute('aria-expanded',String(!open));venueLinks.hidden=open});
+venueLinks.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>closeVenues()));
+document.addEventListener('click',event=>{if(!event.target.closest('.venue-menu'))closeVenues()});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!venueLinks.hidden)closeVenues(true)});
+document.addEventListener('focusin',event=>{if(!event.target.closest('.venue-menu'))closeVenues()});
