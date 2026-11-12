@@ -21,3 +21,7 @@ Music starts when a guest opens the envelope and can be paused using the floatin
 - Envelope, scratch card, and music interactions: `app.js`
 - Calendar download: `wedding.ics`
 - Supplied audio and Ganesha artwork: `assets/`
+
+## Invitation video
+
+`assets/invitation-video.mp4` is the 93-second shareable portrait invitation. The burgundy Download video button downloads it directly. Watch video opens a native video player in a right-side dialog on desktop and a full-width dialog on mobile. Website music pauses during playback. Both sound controls sit on the left, below the video actions, clear of the hosting badge.

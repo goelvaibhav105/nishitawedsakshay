@@ -12,7 +12,7 @@ canvas.addEventListener('pointerdown',e=>{drawing=true;playRevealSound('scratch'
 
 const music=document.querySelector('#wedding-music'),musicToggle=document.querySelector('#music-toggle');music.volume=.55;
 function syncMusic(){const playing=!music.paused;musicToggle.setAttribute('aria-pressed',String(playing));musicToggle.setAttribute('aria-label',playing?'Pause wedding music':'Play wedding music');musicToggle.querySelector('.music-label').textContent=playing?'Music on':'Music off';musicToggle.classList.toggle('playing',playing)}
-function startMusic(){musicToggle.hidden=false;music.play().then(syncMusic).catch(syncMusic)}
+function startMusic(){musicToggle.hidden=false;if(document.querySelector('#video-panel').open)return;music.play().then(syncMusic).catch(syncMusic)}
 musicToggle.addEventListener('click',()=>{if(music.paused)startMusic();else music.pause()});music.addEventListener('play',syncMusic);music.addEventListener('pause',syncMusic);music.addEventListener('error',()=>{musicToggle.querySelector('.music-label').textContent='Retry music';musicToggle.setAttribute('aria-label','Retry wedding music')});
 const stars=document.querySelector('.star-field');for(let i=0;i<32;i++){const star=document.createElement('span');star.textContent=i%3?'✦':'✧';star.style.cssText=`left:${(i*37+7)%100}%;top:${(i*23+3)%100}%;--delay:-${i*.79}s;--duration:${5+i%5}s;--size:${8+i%4*3}px`;stars.appendChild(star)}
 function celebrateDate(){if(reduced)return;const card=document.querySelector('.scratch-card');for(let i=0;i<16;i++){const spark=document.createElement('span');spark.className='date-spark';spark.textContent='✦';spark.style.setProperty('--x',`${Math.cos(i*Math.PI/8)*150}px`);spark.style.setProperty('--y',`${Math.sin(i*Math.PI/8)*110}px`);card.appendChild(spark);setTimeout(()=>spark.remove(),1800)}}
@@ -44,3 +44,12 @@ document.addEventListener('focusin',event=>{if(!event.target.closest('.venue-men
 
 // Allow ten seconds to tap the seal before opening automatically.
 scheduleAutoOpen();
+
+// A native, accessible right-side video viewer; the MP4 also downloads directly.
+const videoPanel=document.querySelector('#video-panel'),invitationFilm=document.querySelector('#invitation-film'),watchVideo=document.querySelector('#watch-video');
+let resumeMusicAfterFilm=false,autoOpenWasPaused=false;
+watchVideo.addEventListener('click',()=>{resumeMusicAfterFilm=!music.paused;music.pause();autoOpenWasPaused=!opening;clearTimeout(autoOpenTimer);videoPanel.showModal();invitationFilm.play().catch(()=>{});});
+document.querySelector('#close-video').addEventListener('click',()=>videoPanel.close());
+videoPanel.addEventListener('click',event=>{if(event.target!==videoPanel)return;const bounds=videoPanel.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)videoPanel.close();});
+videoPanel.addEventListener('close',()=>{invitationFilm.pause();if(resumeMusicAfterFilm)startMusic();if(autoOpenWasPaused&&!opening)scheduleAutoOpen();watchVideo.focus();});
+invitationFilm.addEventListener('play',()=>music.pause());

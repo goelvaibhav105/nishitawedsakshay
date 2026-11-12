@@ -3,6 +3,16 @@
 <body class="sealed">
 <div class="reading-progress" aria-hidden="true"></div><div class="petal-shower" aria-hidden="true"></div>
 <div class="star-field" aria-hidden="true"></div>
+<div class="video-actions" aria-label="Invitation video">
+<a class="video-download" href="assets/invitation-video.mp4" download="Nishita-Akshay-Wedding-Invitation.mp4"><span aria-hidden="true">↓</span> Download video</a>
+<button id="watch-video" class="watch-video" aria-haspopup="dialog"><span aria-hidden="true">▶</span> Watch video</button>
+</div>
+<dialog id="video-panel" aria-labelledby="video-panel-title">
+<div class="video-panel-heading"><div><span class="eyebrow">A LITTLE FILM, A LOT OF LOVE</span><h2 id="video-panel-title">Our invitation film</h2></div><button id="close-video" aria-label="Close video player">×</button></div>
+<video id="invitation-film" controls playsinline preload="none" poster="assets/video-poster.jpg"><source src="assets/invitation-video.mp4" type="video/mp4">Your browser cannot play this video. Please download it below.</video>
+<p>Every celebration, address and contact in one video. Share it with your loved ones.</p>
+<a class="video-download" href="assets/invitation-video.mp4" download="Nishita-Akshay-Wedding-Invitation.mp4">↓ Download to share</a>
+</dialog>
 <button id="effects-toggle" class="effects-toggle" aria-label="Mute reveal sounds" aria-pressed="true" hidden>✧ Reveal sounds on</button>
 <audio id="wedding-music" src="assets/wedding-music.mp3" preload="metadata" loop></audio>
 <button id="music-toggle" class="music-toggle" aria-label="Play wedding music" aria-pressed="false" hidden><span aria-hidden="true">♫</span><span class="music-label">Music off</span></button>
